@@ -34,34 +34,66 @@ def Wrap(filename,width):
 
 #Wrap(sys.argv[1],int(sys.argv[2]))
 
-def WordWrap(filename,width):
+'''def WordWrap(filename,width):
 	f=open(filename).readlines()
-	print f
 	y=[]
-	for i in f:
-		line=i.strip()
-		print line 
-		if len(line)>width:
-			a=line.split()
-			print a
-			x=''
-			counter=0
-			while (len(x)<width):
-				x=x+"".join(a[counter])
-				print x
-				print len(x)
-				print counter
-				counter=counter+1
-			print counter
-			x=x+'\n'
-			for i in a[(counter+1):]:
-				x=x+i
-			print x
-			y.append(x)
-		else:
-			y.append(line)
-		w=open(filename,'w')
-		w.writelines(y)
-		w.close
+	def wrap(f,width):
+		for i in f:
+			line=i
+			if len(line)>width:
+				a=line.split()
+				x=a[0]
+				counter=1
+				while (len(x)<width):
+					x=x+' '+a[counter]
+					counter=counter+1
+				x=x+'\n'
+				for i in a[(counter+1):]:
+					x=x+wrap(i,width)
+				y.append(x)
+			else:
+				y.append(line)
+			return y
+	wrap(f,width)
+	w=open(filename,'w')
+	w.writelines(y)
+	w.close
 
 WordWrap(sys.argv[1],int(sys.argv[2]))
+'''
+
+def Wrap(line,width):
+	'''accepts line as a list and return wrapped line as a string'''
+	y=''
+	flag=False
+	for i in range(len(line)):
+		a=line[i]
+		print a
+		while len(y) < width:
+			print len(y)<width
+			print len(y)
+			print width
+			y=y+' '+a
+			print y
+			y=y+'\n'
+			flag=True
+		if flag and len(line)>0:
+			Wrap(line,width)
+			print y
+	return y
+
+
+def WordWrap(filename,width):
+	f=open(filename).readlines()
+	y=[]
+	for lines in f:
+		list_words=lines.split()
+		y.append(Wrap(list_words,width))
+	w=open(filename,'w')
+	w.writelines(y)
+	w.close()
+
+WordWrap(sys.argv[1],sys.argv[2])
+
+
+
