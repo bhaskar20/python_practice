@@ -62,25 +62,28 @@ def Wrap(filename,width):
 WordWrap(sys.argv[1],int(sys.argv[2]))
 '''
 
-def Wrap(line,width):
+def WrapSec(words,width):
 	'''accepts line as a list and return wrapped line as a string'''
-	y=''
-	flag=False
-	for i in range(len(line)):
-		a=line[i]
-		print a
-		while len(y) < width:
-			print len(y)<width
-			print len(y)
-			print width
-			y=y+' '+a
-			print y
-			y=y+'\n'
-			flag=True
-		if flag and len(line)>0:
-			Wrap(line,width)
-			print y
-	return y
+	line=''
+	lines=[]
+	for i in words:
+		com_length=(len(line)+len(i))
+		if com_length>int(width):
+			lines.append(line)
+			line=''
+		line=line+i+' '
+		if i is words[-1]:lines.append(line+'\n')
+	print lines
+	return lines
+
+
+
+
+
+
+#line=['123','456','789','101112','131415','161718']
+#width=10
+#print Wrap(line,width)
 
 
 def WordWrap(filename,width):
@@ -88,12 +91,49 @@ def WordWrap(filename,width):
 	y=[]
 	for lines in f:
 		list_words=lines.split()
-		y.append(Wrap(list_words,width))
+		y.append("\n".join(WrapSec(list_words,width)))
+		print y
 	w=open(filename,'w')
 	w.writelines(y)
 	w.close()
 
-WordWrap(sys.argv[1],sys.argv[2])
+#WordWrap(sys.argv[1],sys.argv[2])
+
+def align(string,width):
+	'''gets line as a string and max width of lines in file and returns an aligned string'''
+	space=width-len(string)
+	if space%2==0:
+		string=space/2*' '+string
+	else:
+		string=(space-1)/2*' '+string
+	return string+'\n'
+
+	
+
+def centre_align(filename):
+	'''takes a filename and returns a centre aligned file'''
+	f=open(filename).readlines()
+	max_length=0
+	y=[]
+	for line in f:
+		if len(line.strip())>max_length:max_length=len(line.strip())
+
+	for line in f:
+		y.append(align(line.strip(),max_length))
+	print y
+	w=open(filename,'w')
+	w.writelines(y)
+	w.close()
+
+centre_align(sys.argv[1])
+
+
+
+
+
+
+
+
 
 
 
