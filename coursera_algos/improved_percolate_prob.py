@@ -17,40 +17,59 @@ def create_matrix(n):
 	return result
 
 def root(a,flow_matrix,matrix):
-	'''a is a tuple with coordinates of element in matrix list and gives the root as a path of element in a list of tuples'''
+	'''a is a tuples with coordinates of element in matrix list and gives the root as a path of element in a list of tuples'''
 	i=a[0]
 	j=a[1]
-	print i,j
-	path=[(flow_matrix[i][j])]
-	if flow_matrix[i][j]!=None:
-		while flow_matrix[i][j]!=(i,j):
-				i=flow_matrix[i][j][int(0)]
-				j=flow_matrix[i][j][int(1)]
-				path.append(flow_matrix[i][j])
-	return path
+	path=[]
+	for a in flow_matrix[i][j]:
+		a_i=a[0]
+		a_j=a[1]
+		sub=[]
+		while flow_matrix[a_i][a_j]!=[(a_i,a_j)]:
+			sub_path=root((a_i,a_j),flow_matrix,matrix)[2]
+			a_i=root((a_i,a_j),flow_matrix,matrix)[0]
+			a_j=root((a_i,a_j),flow_matrix,matrix)[1]
+			sub.append(sub_path)
+			print a_i,a_j
+		path.append(sub)
+	return a_i,a_j,path
+
+
 def check_neighbours(i,j,matrix):
 	'''takes the coordinates of a element and returns the coordinates of the neighbours with open sites'''
-	result=()
+	result=[]
+	flag=False
 	if i==0:
 		if matrix[i][j-1]==True:
-			result=(i,j-1)
-			return result
+			result.append((i,j-1))
 		else:
-			result=(i,j)
-			return result
-	else:
+			result.append((i,j))
+	flg=False
+	if i==len(matrix[0])-1:
 		if matrix[i-1][j]==True:
-			result=(i-1,j)
-			return result
-		else:
-			result=(i,j-1)
-			return result
+			result.append((i-1,j))
+			flg=True
+			flag=True
 		if matrix[i][j-1]==True:
-			result=(i,j-1)
-			return result
-		else:
-			result=(i,j)
-			return result
+			result.append((i,j-1))
+			flg=True
+		if flg==False:
+			result.append((i,j))
+	if i in range(1,len(matrix[0])-1):
+		if matrix[i-1][j]==True:
+			result.append((i-1,j))
+			flg=True
+			flag=True
+		if matrix[i][j-1]==True:
+			result.append((i,j-1))
+			flg=True
+		if matrix[i+1][j]==True and flag==False:
+			result.append((i+1,j))
+			flg=True
+		if flg==False:
+			result.append((i,j))
+	return result
+
 
 def flow(matrix,n):
 	'''gives a matrix with each element connected to root if possible by any path'''
@@ -59,7 +78,7 @@ def flow(matrix,n):
 	n=len(matrix[0])
 	for i in range(n):
 		if matrix[i][0]==True:
-			temp.append((i,0))
+			temp.append([(i,0)])
 		else:
 			temp.append(None)
 		for j in range(1,n):
@@ -73,15 +92,20 @@ def flow(matrix,n):
 
 def connected():
 	'''creates a matrix and checks if it percolates'''
-	n=5
+	n=4
 	a=create_matrix(n)
-	print a
 	flow_matrix=flow(a,n)
-	print flow_matrix
+	for b in flow_matrix:
+		print b
+	print "\n"
 	result=[]
-	for i in range(n):
+	for i in range(0,n):
 		if a[i][n-1]==True:
 			result.append(root((i,n-1),flow_matrix,a))
+		else:
+			result.append(None)
+			print "None appended in result"
+			print result
 	return result
 	
 
