@@ -44,15 +44,32 @@ def flat_dict(dic,result={},key=''):
 			result[a]=b
 	return result
 
-print flat_dict({'a': 1, 'b': {'x': 2, 'y': 3}, 'c': 4})
+#print flat_dict({'a': 1, 'b': {'x': 2, 'y': 3}, 'c': 4})
 
-def unflat_dict(dic,result={}):
-	for a,b in zip(dic.keys(),dic.values()):
-		if len(a.split('.'))==1:
-			result[a]=b
+def unflat_dict(dic):
+	result=dict()
+	for a,b in dic.iteritems():
+		d=result
+		print d
+		lis=a.split('.')
+		for part in lis[:-1]:
+			if part not in result:
+				d[part]=dict()
+			d=d[part]
+		d[lis[-1]]=b
+	return result
+			
+#print unflat_dict({'a': 1, 'b.x.1': 2,'b.x.10':4, 'b.y.3': 3, 'c': 4})
+
+def treemap(func,s):
+	result=[]
+	for a,i in zip(s,range(len(s))):
+		if isinstance(a,list):
+			print treemap(func,a)
 		else:
-			sup_dic=a.split('.')
-			result[dic[0]]=unflat_dict(dic[1])
+			result.append(func(a))
+	return result
+
+print treemap(lambda x: x*x, [1, 2, [3, 4, [5]]])
 
 
-#print unflat_dict({'a': 1, 'b.x': 2, 'b.y': 3, 'c': 4})
