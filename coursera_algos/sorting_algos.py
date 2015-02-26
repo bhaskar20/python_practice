@@ -14,7 +14,7 @@ def slectionsort(a):
 		a[i]=min
 	return a
 
-print slectionsort(a)
+#print slectionsort(a)
 
 def insertionsort(a):
 	for i in range(1,len(a)):
@@ -26,20 +26,30 @@ def insertionsort(a):
 		a[j+1]=val
 	return a
 
-print insertionsort(a)
+#print insertionsort(a)
 
 def shellsort(a):
-	pass
+	gap=len(a)//2
+	while gap:
+		for i,x in enumerate(a):
+			while i>=gap and a[i-gap]>x:
+				a[i]=a[i-gap]
+				i=i-gap
+			a[i]=x
+		gap=gap//2
+	return a
+
+#print shellsort(a)
+
 def bubblesort(a):
-	pass
-def quicksort(a):
-	pass
-def mergesort(a):
-	pass
-def bottomupmergesort(a):
-	pass
-def heapsort(a):
-	pass
+	for i in range(len(a)):
+		for j in range(i,len(a)):
+			if a[i]>a[j]:
+				a[j],a[i]=a[i],a[j]
+	return a
+
+#print bubblesort(a)
+
 
 
 
