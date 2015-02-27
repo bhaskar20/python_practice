@@ -5,8 +5,8 @@ a=[random.randint(-100,100) for x in range(10)]
 def no_of_three_sum(seq):
 	count=0
 	for i in range(len(seq)):
-		for j in range(i,len(seq)):
-			for k in range(j,len(seq)):
+		for j in range(i+1,len(seq)):
+			for k in range(j+1,len(seq)):
 				if (seq[i]+seq[j]+seq[k]==0):
 					print seq[i],seq[j],seq[k]
 					count+=1
@@ -52,7 +52,7 @@ def main():
 	b=sort(seq)
 	count=0
 	for i in range(len(b)):
-		for j in range(i,len(b)):
+		for j in range(i+1,len(b)):
 			find=-(b[i]+b[j])
 			if search(b,find)==True:
 				print b[i],b[j],find
