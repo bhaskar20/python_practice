@@ -8,16 +8,8 @@ function [X_norm, mu, sigma] = featureNormalize(X)
 % You need to set these values correctly
 mu = mean(X);
 sigma=std(X);
-reduction_mat=ones(size(X));
-for i=1:size(X,2),
-	reduction_mat(:,i)=reduction_mat(:,i)*mu(i);
-end
-mu1=X-reduction_mat;
-red_mat=ones(size(X));
-for i=1:size(X,2),
-	red_mat(:,i)=red_mat(:,i)/sigma(i);
-end
-X_norm=mu1./red_mat;
+t=ones(size(X),1);
+X_norm=(X.-(t*mu))./(t*sigma);
 
 
 
